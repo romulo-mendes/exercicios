@@ -24,7 +24,7 @@ const CarCardDiv = styled.div`
 	background-color: #6e6e80;
 	padding: 20px;
 	cursor: pointer;
-	transition: 0.2s ease-in-out;
+	
 	img {
 		width: 200px;
 		height: 150px;
@@ -35,9 +35,6 @@ const CarCardDiv = styled.div`
 	}
 	h2 {
 		margin-top: 10px;
-	}
-	:hover {
-		transform: scale(1.05);
 	}
 `;
 
