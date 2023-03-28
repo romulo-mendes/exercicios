@@ -10,12 +10,16 @@ import {
 	Checkbox,
 	FormControlLabel,
 } from "@mui/material";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import MenuItem from "@mui/material/MenuItem";
-import { CardsContainer, HomeContainer,  } from "./HomeStyle";
-import { CarsByBrandType, CarType, mostCommonYearType, orderByEnum } from "../models";
-
-
-
+import { CardsContainer, HomeContainer } from "./HomeStyle";
+import {
+	CarsByBrandType,
+	CarType,
+	mostCommonYearType,
+	orderByEnum,
+} from "../models";
 
 const Home = () => {
 	const [cars, setCars] = useState(carros);
@@ -30,6 +34,7 @@ const Home = () => {
 	const [selectedMedian, setSelectedMedian] = useState<number>();
 	const [SelectedStandardDeviation, setSelectedStandardDeviation] =
 		useState<number>();
+	const [showFilters, setShowFilters] = useState(false);
 
 	const [search, setSearch] = useState("");
 	const [maxYear, setMaxYear] = useState("");
@@ -179,7 +184,6 @@ const Home = () => {
 
 	function handleClickCard(carro: CarType, e: MouseEvent) {
 		const cardDiv = e.currentTarget as HTMLElement;
-		console.log(e.currentTarget);
 		const isSelected = cardDiv?.classList.toggle("selected");
 		if (isSelected) {
 			setTotalSelectCars([...totalSelectCars, carro]);
@@ -224,206 +228,223 @@ const Home = () => {
 		<HomeContainer>
 			<div className="form-div">
 				<form onSubmit={(e) => handleSubmit(e)}>
-					<TextField
-						sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
-						id="search"
-						fullWidth
-						label="Pesquisar"
-						placeholder="Digite o modelo ou marca..."
-						onChange={(e) => setSearch(e.target.value)}
-						value={search}
-						InputLabelProps={{ style: { color: "#fff" } }}
-					/>
-					<div className="row-year-brand">
-						<FormControl fullWidth>
-							<InputLabel sx={{ color: "#fff" }} id="year-min-select-label">
-								Ano mínimo
-							</InputLabel>
-							<Select
-								sx={{
-									backgroundColor: "#6e6e807f",
-									borderRadius: "5px",
-									color: "#fff",
-								}}
-								labelId="year-min-select-label"
-								id="year-min"
-								fullWidth
-								onChange={(e) => setMinYear(e.target.value)}
-								value={minYear}
-							>
-								{allYearsMin.map((year, index) => {
-									return (
-										<MenuItem key={`${index}-${year}`} value={year}>
-											{year}
-										</MenuItem>
-									);
-								})}
-							</Select>
-						</FormControl>
-						<FormControl fullWidth>
-							<InputLabel sx={{ color: "#fff" }} id="year-max-select-label">
-								Ano máximo
-							</InputLabel>
-							<Select
-								sx={{
-									backgroundColor: "#6e6e807f",
-									borderRadius: "5px",
-									color: "#fff",
-								}}
-								labelId="year-max-select-label"
-								id="year-max"
-								fullWidth
-								onChange={(e) => setMaxYear(e.target.value)}
-								value={maxYear}
-							>
-								{allYearsMax.map((year, index) => {
-									return (
-										<MenuItem key={`${index}-${year}`} value={year}>
-											{year}
-										</MenuItem>
-									);
-								})}
-							</Select>
-						</FormControl>
-						<FormControl fullWidth>
-							<InputLabel sx={{ color: "#fff" }} id="brand-select-label">
-								Marca
-							</InputLabel>
-							<Select
-								sx={{
-									backgroundColor: "#6e6e807f",
-									borderRadius: "5px",
-									color: "#fff",
-								}}
-								labelId="brand-select-label"
-								id="select-brand"
-								value={brand}
-								label="Age"
-								onChange={(e) => setBrand(e.target.value)}
-							>
-								{allBrand.map((brand, index) => {
-									return (
-										<MenuItem key={`${index}-${brand.marca}`} value={brand.marca}>
-											{`${brand.marca} (${brand.quantidade})`}
-										</MenuItem>
-									);
-								})}
-							</Select>
-						</FormControl>
-						<FormControl fullWidth>
-							<InputLabel sx={{ color: "#fff" }} id="fuel-select-label">
-								Combustível
-							</InputLabel>
-							<Select
-								sx={{
-									backgroundColor: "#6e6e807f",
-									borderRadius: "5px",
-									color: "#fff",
-								}}
-								labelId="fuel-select-label"
-								id="select-fuel"
-								value={fuel}
-								label="Age"
-								onChange={(e) => setFuel(e.target.value)}
-							>
-								{allFuel.map((fuel, index) => {
-									return (
-										<MenuItem key={`${index}-${fuel}`} value={fuel}>
-											{fuel}
-										</MenuItem>
-									);
-								})}
-							</Select>
-						</FormControl>
-					</div>
-					<div className="row-price-km">
+					<div className="main-search">
 						<TextField
 							sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
-							id="min-price"
+							id="search"
 							fullWidth
-							label="Preço mínimo"
-							onChange={(e) => setMinPrice(e.target.value)}
-							value={minPrice}
+							label="Pesquisar"
+							placeholder="Digite o modelo ou marca..."
+							onChange={(e) => setSearch(e.target.value)}
+							value={search}
 							InputLabelProps={{ style: { color: "#fff" } }}
 						/>
-						<TextField
-							sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
-							id="max-price"
-							fullWidth
-							label="Preço máximo"
-							onChange={(e) => setMaxPrice(e.target.value)}
-							value={maxPrice}
-							InputLabelProps={{ style: { color: "#fff" } }}
-						/>
-						<TextField
-							sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
-							id="min-km"
-							fullWidth
-							label="Km mínimo"
-							onChange={(e) => setMinKm(e.target.value)}
-							value={minKm}
-							InputLabelProps={{ style: { color: "#fff" } }}
-						/>
-						<TextField
-							sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
-							id="max-km"
-							fullWidth
-							label="Km mínimo"
-							onChange={(e) => setMaxKm(e.target.value)}
-							value={maxKm}
-							InputLabelProps={{ style: { color: "#fff" } }}
-						/>
-					</div>
-					<div className="order-div">
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={isNew}
-									onChange={(e) => setIsNew(e.target.checked)}
-								/>
-							}
-							label="Apenas novos"
-						/>
-						<div className="order-asc-desc">
-							<div className="label-order-div">
-								<p>Ordem:</p>
-							</div>
-							<FormControlLabel
-								control={
-									<Checkbox checked={order} onChange={() => setOrder(true)} />
-								}
-								label="Ascendente"
-							/>
-							<FormControlLabel
-								control={
-									<Checkbox checked={!order} onChange={() => setOrder(false)} />
-								}
-								label="Decrescente"
-							/>
-							<FormControl fullWidth>
-								<InputLabel sx={{ color: "#fff" }} id="order-by-select-label">
-									Ordenar por:
-								</InputLabel>
-								<Select
-									sx={{
-										backgroundColor: "#6e6e807f",
-										borderRadius: "5px",
-										color: "#fff",
-									}}
-									labelId="order-by-select-label"
-									id="select-order-by"
-									value={orderBy}
-									onChange={(e) => setOrderBy(e.target.value as orderByEnum)}
-								>
-									<MenuItem value={orderByEnum.marca}>Marca</MenuItem>
-									<MenuItem value={orderByEnum.modelo}>Modelo</MenuItem>
-									<MenuItem value={orderByEnum.preco}>Preço</MenuItem>
-									<MenuItem value={orderByEnum.ano}>Ano</MenuItem>
-									<MenuItem value={orderByEnum.km}>Quilometragem</MenuItem>
-								</Select>
-							</FormControl>
+						<div className="show-more" onClick={() => setShowFilters(!showFilters)}>
+							<p>{showFilters ? "Exibir menos filtros" : "Exibir mais filtros"}</p>
+							{showFilters ? (
+								<KeyboardDoubleArrowUpIcon fontSize="small" />
+							) : (
+								<KeyboardDoubleArrowDownIcon fontSize="small" />
+							)}
 						</div>
 					</div>
+					{showFilters && (
+						<div className="second-search">
+							<div className="row-year-brand">
+								<FormControl fullWidth>
+									<InputLabel sx={{ color: "#fff" }} id="year-min-select-label">
+										Ano mínimo
+									</InputLabel>
+									<Select
+										sx={{
+											backgroundColor: "#6e6e807f",
+											borderRadius: "5px",
+											color: "#fff",
+										}}
+										labelId="year-min-select-label"
+										id="year-min"
+										fullWidth
+										onChange={(e) => setMinYear(e.target.value)}
+										value={minYear}
+									>
+										{allYearsMin.map((year, index) => {
+											return (
+												<MenuItem key={`${index}-${year}`} value={year}>
+													{year}
+												</MenuItem>
+											);
+										})}
+									</Select>
+								</FormControl>
+								<FormControl fullWidth>
+									<InputLabel sx={{ color: "#fff" }} id="year-max-select-label">
+										Ano máximo
+									</InputLabel>
+									<Select
+										sx={{
+											backgroundColor: "#6e6e807f",
+											borderRadius: "5px",
+											color: "#fff",
+										}}
+										labelId="year-max-select-label"
+										id="year-max"
+										fullWidth
+										onChange={(e) => setMaxYear(e.target.value)}
+										value={maxYear}
+									>
+										{allYearsMax.map((year, index) => {
+											return (
+												<MenuItem key={`${index}-${year}`} value={year}>
+													{year}
+												</MenuItem>
+											);
+										})}
+									</Select>
+								</FormControl>
+								<FormControl fullWidth>
+									<InputLabel sx={{ color: "#fff" }} id="brand-select-label">
+										Marca
+									</InputLabel>
+									<Select
+										sx={{
+											backgroundColor: "#6e6e807f",
+											borderRadius: "5px",
+											color: "#fff",
+										}}
+										labelId="brand-select-label"
+										id="select-brand"
+										value={brand}
+										label="Age"
+										onChange={(e) => setBrand(e.target.value)}
+									>
+										{allBrand.map((brand, index) => {
+											return (
+												<MenuItem
+													key={`${index}-${brand.marca}`}
+													value={brand.marca}
+												>
+													{`${brand.marca} (${brand.quantidade})`}
+												</MenuItem>
+											);
+										})}
+									</Select>
+								</FormControl>
+								<FormControl fullWidth>
+									<InputLabel sx={{ color: "#fff" }} id="fuel-select-label">
+										Combustível
+									</InputLabel>
+									<Select
+										sx={{
+											backgroundColor: "#6e6e807f",
+											borderRadius: "5px",
+											color: "#fff",
+										}}
+										labelId="fuel-select-label"
+										id="select-fuel"
+										value={fuel}
+										label="Age"
+										onChange={(e) => setFuel(e.target.value)}
+									>
+										{allFuel.map((fuel, index) => {
+											return (
+												<MenuItem key={`${index}-${fuel}`} value={fuel}>
+													{fuel}
+												</MenuItem>
+											);
+										})}
+									</Select>
+								</FormControl>
+							</div>
+							<div className="row-price-km">
+								<TextField
+									sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
+									id="min-price"
+									fullWidth
+									label="Preço mínimo"
+									onChange={(e) => setMinPrice(e.target.value)}
+									value={minPrice}
+									InputLabelProps={{ style: { color: "#fff" } }}
+								/>
+								<TextField
+									sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
+									id="max-price"
+									fullWidth
+									label="Preço máximo"
+									onChange={(e) => setMaxPrice(e.target.value)}
+									value={maxPrice}
+									InputLabelProps={{ style: { color: "#fff" } }}
+								/>
+								<TextField
+									sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
+									id="min-km"
+									fullWidth
+									label="Km mínimo"
+									onChange={(e) => setMinKm(e.target.value)}
+									value={minKm}
+									InputLabelProps={{ style: { color: "#fff" } }}
+								/>
+								<TextField
+									sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
+									id="max-km"
+									fullWidth
+									label="Km mínimo"
+									onChange={(e) => setMaxKm(e.target.value)}
+									value={maxKm}
+									InputLabelProps={{ style: { color: "#fff" } }}
+								/>
+							</div>
+							<div className="order-div">
+								<FormControlLabel
+									control={
+										<Checkbox
+											checked={isNew}
+											onChange={(e) => setIsNew(e.target.checked)}
+										/>
+									}
+									label="Apenas novos"
+								/>
+								<div className="order-asc-desc">
+									<div className="label-order-div">
+										<p>Ordem:</p>
+									</div>
+									<FormControlLabel
+										control={
+											<Checkbox checked={order} onChange={() => setOrder(true)} />
+										}
+										label="Ascendente"
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox checked={!order} onChange={() => setOrder(false)} />
+										}
+										label="Decrescente"
+									/>
+									<FormControl fullWidth>
+										<InputLabel sx={{ color: "#fff" }} id="order-by-select-label">
+											Ordenar por:
+										</InputLabel>
+										<Select
+											sx={{
+												backgroundColor: "#6e6e807f",
+												borderRadius: "5px",
+												color: "#fff",
+											}}
+											labelId="order-by-select-label"
+											id="select-order-by"
+											value={orderBy}
+											onChange={(e) => setOrderBy(e.target.value as orderByEnum)}
+										>
+											<MenuItem value={orderByEnum.marca}>Marca</MenuItem>
+											<MenuItem value={orderByEnum.modelo}>Modelo</MenuItem>
+											<MenuItem value={orderByEnum.preco}>Preço</MenuItem>
+											<MenuItem value={orderByEnum.ano}>Ano</MenuItem>
+											<MenuItem value={orderByEnum.km}>Quilometragem</MenuItem>
+										</Select>
+									</FormControl>
+								</div>
+							</div>
+						</div>
+					)}
 					<div className="buttons-form">
 						<Button type="submit" variant="outlined" size="large">
 							Pesquisar

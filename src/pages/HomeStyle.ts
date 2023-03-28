@@ -34,7 +34,7 @@ export const CardsContainer = styled.div`
 		right: 30px;
 		top: -5px;
 	}
-	.standard-deviation{
+	.standard-deviation {
 		left: 30px;
 		top: 25px;
 	}
@@ -70,6 +70,22 @@ export const HomeContainer = styled.div`
 	flex-direction: column;
 	gap: 40px;
 	width: 100%;
+	.main-search {
+		width: 100%;
+		.show-more {
+			display: flex;
+			gap: 5px;
+			margin: 5px;
+			cursor: pointer;
+			color: #3b8ced;
+			p {
+				color: #3b8ced;
+			}
+		}
+	}
+	.second-search {
+		width: 100%;
+	}
 	.order-div {
 		margin-top: 20px;
 		display: flex;

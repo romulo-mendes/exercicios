@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { carros } from "../data";
-import { CarType } from "../pages/Home";
+import { CarType } from "../models";
 
 function BannerOffers({ carros }: { carros: CarType[] }) {
 	const [countdown, setCountdown] = useState<number>(10800);
