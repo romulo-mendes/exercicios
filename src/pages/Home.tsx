@@ -35,6 +35,7 @@ const Home = () => {
 	const [SelectedStandardDeviation, setSelectedStandardDeviation] =
 		useState<number>();
 	const [showFilters, setShowFilters] = useState(false);
+	const [showAboutCars, setShowAboutCars] = useState(false);
 
 	const [search, setSearch] = useState("");
 	const [maxYear, setMaxYear] = useState("");
@@ -387,7 +388,7 @@ const Home = () => {
 									sx={{ backgroundColor: "#6e6e807f", borderRadius: "5px" }}
 									id="max-km"
 									fullWidth
-									label="Km mínimo"
+									label="Km máximo"
 									onChange={(e) => setMaxKm(e.target.value)}
 									value={maxKm}
 									InputLabelProps={{ style: { color: "#fff" } }}
@@ -407,18 +408,23 @@ const Home = () => {
 									<div className="label-order-div">
 										<p>Ordem:</p>
 									</div>
-									<FormControlLabel
-										control={
-											<Checkbox checked={order} onChange={() => setOrder(true)} />
-										}
-										label="Ascendente"
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox checked={!order} onChange={() => setOrder(false)} />
-										}
-										label="Decrescente"
-									/>
+									<div className="checkbox-div">
+										<FormControlLabel
+											control={
+												<Checkbox checked={order} onChange={() => setOrder(true)} />
+											}
+											label="Ascendente"
+										/>
+										<FormControlLabel
+											control={
+												<Checkbox
+													checked={!order}
+													onChange={() => setOrder(false)}
+												/>
+											}
+											label="Decrescente"
+										/>
+									</div>
 									<FormControl fullWidth>
 										<InputLabel sx={{ color: "#fff" }} id="order-by-select-label">
 											Ordenar por:
@@ -446,11 +452,11 @@ const Home = () => {
 						</div>
 					)}
 					<div className="buttons-form">
-						<Button type="submit" variant="outlined" size="large">
-							Pesquisar
-						</Button>
 						<Button type="reset" variant="outlined" size="large">
 							Limpar
+						</Button>
+						<Button type="submit" variant="outlined" size="large">
+							Pesquisar
 						</Button>
 					</div>
 				</form>
@@ -480,37 +486,63 @@ const Home = () => {
 						Calcular
 					</Button>
 				</div>
+				{showAboutCars ? (
+					<div className="about-selected-cars">
+						<div className="total-cars selected-cars">
+							<p>Total de carros encontrados: </p>
+							<span>{totalCars}</span>
+						</div>
+						<div className="total selected-cars">
+							<p>Total de carros selecionados: </p>
+							<span>{totalSelectCars.length}</span>
+						</div>
+						<div className="total-value selected-cars">
+							<p>Valor total dos carros selecionados: </p>
+							<span>
+								{totalSelectCars
+									.reduce(
+										(accumulator, currentCar) => accumulator + currentCar.preco,
+										0
+									)
+									.toLocaleString("pt-BR", {
+										style: "currency",
+										currency: "BRL",
+									})}
+							</span>
+						</div>
+						<div className="median-years selected-cars">
+							<p>Mediana dos carros selecionados: </p>
+							<span>{selectedMedian && selectedMedian}</span>
+						</div>
+						<div className="standard-deviation selected-cars">
+							<p>Desvio padrão de quilometragem dos carros selecionados: </p>
+							<span>
+								{SelectedStandardDeviation && SelectedStandardDeviation.toFixed(2)}
+							</span>
+						</div>
+						<div
+							onClick={() => {
+								setShowAboutCars(!showAboutCars);
+							}}
+							className="show-more-less-about-selected-cars"
+						>
+							<p>Esconder informações dos carros selecionados</p>
+							<KeyboardDoubleArrowUpIcon fontSize="small" />
+						</div>
+					</div>
+				) : (
+					<div
+						onClick={() => {
+							setShowAboutCars(!showAboutCars);
+						}}
+						className="show-more-less-about-selected-cars"
+					>
+						<p>Mostrar informações dos carros selecionados</p>
+						<KeyboardDoubleArrowDownIcon fontSize="small" />
+					</div>
+				)}
 			</div>
 			<CardsContainer>
-				<div className="total-cars selected-cars">
-					<p>Total de carros encontrados: </p>
-					<span>{totalCars}</span>
-				</div>
-				<div className="total selected-cars">
-					<p>Total de carros selecionados: </p>
-					<span>{totalSelectCars.length}</span>
-				</div>
-				<div className="total-value selected-cars">
-					<p>Valor total dos carros selecionados: </p>
-					<span>
-						{totalSelectCars
-							.reduce((accumulator, currentCar) => accumulator + currentCar.preco, 0)
-							.toLocaleString("pt-BR", {
-								style: "currency",
-								currency: "BRL",
-							})}
-					</span>
-				</div>
-				<div className="median-years selected-cars">
-					<p>Mediana dos carros selecionados: </p>
-					<span>{selectedMedian && selectedMedian}</span>
-				</div>
-				<div className="standard-deviation selected-cars">
-					<p>Desvio padrão de quilometragem dos carros selecionados: </p>
-					<span>
-						{SelectedStandardDeviation && SelectedStandardDeviation.toFixed(2)}
-					</span>
-				</div>
 				{cars.map((carro, index) => {
 					return (
 						<div

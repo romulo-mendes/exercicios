@@ -8,16 +8,6 @@ export const CardsContainer = styled.div`
 	justify-content: center;
 	padding-top: 75px;
 	position: relative;
-	.selected-cars {
-		position: absolute;
-		display: flex;
-		align-items: center;
-		gap: 5px;
-		color: #fff;
-		span {
-			font-size: 20px;
-		}
-	}
 	.total-cars {
 		left: 30px;
 		top: -35px;
@@ -97,6 +87,7 @@ export const HomeContainer = styled.div`
 			border-radius: 5px;
 			border: 2px solid #242424;
 			display: flex;
+			gap: 10px;
 			width: 60%;
 			justify-content: space-between;
 			.label-order-div {
@@ -111,13 +102,28 @@ export const HomeContainer = styled.div`
 			}
 			.MuiFormControl-root {
 				max-width: 40%;
+				@media screen and (max-width: 509px) {
+					max-width: 100%;
+				}
+			}
+			@media screen and (max-width: 767px) {
+				width: 100%;
+			}
+			@media screen and (max-width: 525px) {
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+			.checkbox-div {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
 			}
 		}
 	}
 	.form-div {
 		border: 1px solid #272727;
 		padding: 20px;
-		min-width: 350px;
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
@@ -138,6 +144,7 @@ export const HomeContainer = styled.div`
 		margin-top: 20px;
 		width: 100%;
 	}
+
 	.row-price-km {
 		display: flex;
 		gap: 20px;
@@ -148,10 +155,40 @@ export const HomeContainer = styled.div`
 		margin-top: 20px;
 		display: flex;
 		gap: 20px;
+		@media (max-width: 380px) {
+			flex-direction: column;
+		}
 	}
 	.calcs-div {
 		display: flex;
 		flex-direction: column;
 		gap: 30px;
+	}
+	.show-more-less-about-selected-cars {
+		cursor: pointer;
+		display: flex;
+
+		margin-top: 15px;
+		color: #3b8ced;
+		p {
+			color: #3b8ced;
+		}
+	}
+	.selected-cars {
+		display: flex;
+		gap: 5px;
+		span {
+			color: #fff;
+		}
+	}
+	@media (max-width: 767px) {
+		.row-year-brand,
+		.row-price-km,
+		.order-div {
+			flex-direction: column;
+		}
+		.order-asc-desc {
+			width: 100%;
+		}
 	}
 `;
