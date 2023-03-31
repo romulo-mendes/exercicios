@@ -1,6 +1,6 @@
 # Exercícios de JavaScript
 
-Este repositório contém uma lista de exercícios para praticar habilidades em JavaScript, focando na manipulação do DOM e na criação de interfaces de usuário para a apresentação de dados de carros.
+Este repositório contém uma lista de exercícios para praticar habilidades em JavaScript, construindo uma página para busca de carros usados.
 
 ## Descrição dos exercícios
 
