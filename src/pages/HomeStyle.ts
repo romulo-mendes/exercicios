@@ -60,6 +60,7 @@ export const HomeContainer = styled.div`
 	flex-direction: column;
 	gap: 40px;
 	width: 100%;
+	position: relative;
 	.main-search {
 		width: 100%;
 		.show-more {
@@ -189,6 +190,30 @@ export const HomeContainer = styled.div`
 		}
 		.order-asc-desc {
 			width: 100%;
+		}
+	}
+	.banner-div {
+		position: fixed;
+		right: 0;
+		cursor: pointer;
+	}
+	.banner-border-div {
+		position: fixed;
+		right: 0;
+		cursor: pointer;
+		border: 4px solid red;
+		border-right: 0;
+		background-color: #f5f5f5;
+		border-radius: 8px 0 0 8px;
+		width: 40px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		p {
+			color: #cc0000;
+			transform: rotate(90deg);
+			font-weight: bold;
+			font-size: 16px;
 		}
 	}
 `;

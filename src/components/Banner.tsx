@@ -1,16 +1,65 @@
-import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useState, useEffect } from "react";
 import { CarType } from "../models";
 
-function BannerOffers({ carros }: { carros: CarType[] }) {
-	const [countdown, setCountdown] = useState<number>(10800);
+const BannerContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: #f5f5f5;
+	padding: 10px;
+	border-radius: 8px 0 0 8px;
+	border: 4px solid red;
+	border-right: 0;
+`;
 
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setCountdown((prevCountdown) => prevCountdown - 1);
-		}, 1000);
+const CarLowestPriceContainer = styled.div`
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	p {
+		margin: 0;
+		font-size: 18px;
+		font-weight: bold;
+		line-height: 1.2;
+		color: #444444;
+	}
 
-		return () => clearInterval(intervalId);
-	}, []);
+	.original-price {
+		margin-right: 10px;
+		text-decoration: line-through;
+		color: #888888;
+	}
+
+	.discounted-price {
+		color: #cc0000;
+		font-size: 22px;
+		font-weight: bold;
+	}
+`;
+
+const CountdownTimerContainer = styled.div`
+	display: flex;
+	align-items: center;
+
+	p {
+		margin: 0;
+		font-size: 18px;
+		font-weight: bold;
+		line-height: 1.2;
+		color: #cc0000;
+		margin-left: 20px;
+	}
+`;
+
+const BannerOffers = ({
+	carros,
+	countdown,
+}: {
+	carros: CarType[];
+	countdown: number;
+}) => {
+	
 
 	const carWithLowestPrice = carros.reduce((lowestPriceCar, currentCar) => {
 		if (currentCar.preco < lowestPriceCar.preco) {
@@ -34,18 +83,19 @@ function BannerOffers({ carros }: { carros: CarType[] }) {
 	const secondsLeft = countdown % 60;
 
 	return (
-		<div className="banner-offers">
-			<div className="car-lowest-price">
+		<BannerContainer>
+			<CarLowestPriceContainer>
 				<p>{`${carWithLowestPrice.modelo} - ${carWithLowestPrice.marca}`}</p>
 				<p>
 					<span className="original-price">{originalPriceFormatted}</span>
 					<span className="discounted-price">{discountedPriceFormatted}</span>
 				</p>
-			</div>
-			<div className="countdown-timer">
-				<p>Offer for a limited time only</p>
-				<p>{`Corra! Ofertas validas por ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s apenas`}</p>
-			</div>
-		</div>
+			</CarLowestPriceContainer>
+			<CountdownTimerContainer>
+				<p>{`Corra! Ofertas válidas por ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s apenas`}</p>
+			</CountdownTimerContainer>
+		</BannerContainer>
 	);
-}
+};
+
+export default BannerOffers;

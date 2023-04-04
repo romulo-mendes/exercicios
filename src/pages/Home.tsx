@@ -1,6 +1,6 @@
 import CarCard from "../components/CarCard";
 import { carros } from "../data";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import {
 	FormControl,
 	TextField,
@@ -20,6 +20,7 @@ import {
 	mostCommonYearType,
 	orderByEnum,
 } from "../models";
+import BannerOffers from "../components/Banner";
 
 const Home = () => {
 	const [cars, setCars] = useState(carros);
@@ -36,6 +37,10 @@ const Home = () => {
 		useState<number>();
 	const [showFilters, setShowFilters] = useState(false);
 	const [showAboutCars, setShowAboutCars] = useState(false);
+	const [showBanner, setShowBanner] = useState(true);
+	const bannerRef = useRef<HTMLDivElement>(null);
+	const [bannerHeight, setBannerHeight] = useState<number | null>(null);
+	const [countdown, setCountdown] = useState<number>(10800);
 
 	const [search, setSearch] = useState("");
 	const [maxYear, setMaxYear] = useState("");
@@ -57,6 +62,20 @@ const Home = () => {
 			.replace(/[\u0300-\u036f]/g, "")
 			.toLowerCase();
 	}
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			setCountdown((prevCountdown) => prevCountdown - 1);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
+	useEffect(() => {
+		if (bannerRef.current) {
+			setBannerHeight(bannerRef.current.clientHeight);
+		}
+	}, [showBanner]);
 
 	useEffect(() => {
 		const uniqueYears = cars.reduce<number[]>((currentYear, car) => {
@@ -183,7 +202,10 @@ const Home = () => {
 		setMostCommonYear(mostCommonYearCurrent);
 	}
 
-	function handleClickCard(carro: CarType, e: MouseEvent) {
+	function handleClickCard(
+		carro: CarType,
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) {
 		const cardDiv = e.currentTarget as HTMLElement;
 		const isSelected = cardDiv?.classList.toggle("selected");
 		if (isSelected) {
@@ -555,6 +577,25 @@ const Home = () => {
 					);
 				})}
 			</CardsContainer>
+			{showBanner ? (
+				<div
+					className="banner-div"
+					onClick={() => setShowBanner(!showBanner)}
+					ref={bannerRef}
+				>
+					<BannerOffers countdown={countdown} carros={carros} />
+				</div>
+			) : (
+				bannerHeight && (
+					<div
+						className="banner-border-div"
+						onClick={() => setShowBanner(!showBanner)}
+						style={{ height: bannerHeight }}
+					>
+						<p>OFERTA!!</p>
+					</div>
+				)
+			)}
 		</HomeContainer>
 	);
 };
