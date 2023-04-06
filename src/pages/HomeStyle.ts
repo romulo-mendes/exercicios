@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const CardsContainer = styled.div`
 	display: flex;
@@ -192,28 +192,49 @@ export const HomeContainer = styled.div`
 			width: 100%;
 		}
 	}
-	.banner-div {
-		position: fixed;
-		right: 0;
-		cursor: pointer;
-	}
-	.banner-border-div {
-		position: fixed;
-		right: 0;
-		cursor: pointer;
-		border: 4px solid red;
-		border-right: 0;
-		background-color: #f5f5f5;
-		border-radius: 8px 0 0 8px;
-		width: 40px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		p {
-			color: #cc0000;
-			transform: rotate(90deg);
-			font-weight: bold;
-			font-size: 16px;
-		}
+`;
+const slideInRight = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+`;
+
+const slideOutRight = keyframes`
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+`;
+
+export const BannerDiv = styled.div<{ show: boolean }>`
+	position: fixed;
+	right: 0;
+	cursor: pointer;
+	animation: ${({ show }) => (show ? slideInRight : slideOutRight)} 0.5s ease;
+`;
+
+export const BannerBorderDiv = styled.div<{ show: boolean }>`
+	position: fixed;
+	right: 0;
+	cursor: pointer;
+	border: 4px solid red;
+	border-right: 0;
+	background-color: #f5f5f5;
+	border-radius: 8px 0 0 8px;
+	width: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	animation: ${({ show }) => (show ? slideInRight : slideOutRight)} 0.5s ease;
+	p {
+		color: #cc0000;
+		transform: rotate(90deg);
+		font-weight: bold;
+		font-size: 16px;
 	}
 `;

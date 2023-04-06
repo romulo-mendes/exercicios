@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 import { CarType } from "../models";
 
 const BannerContainer = styled.div`
@@ -66,7 +65,7 @@ const BannerOffers = ({
 			return currentCar;
 		}
 		return lowestPriceCar;
-	}, carros[0]);
+	});
 
 	const discountedPrice = carWithLowestPrice.preco * 0.75;
 	const originalPriceFormatted = carWithLowestPrice.preco.toLocaleString("pt-BR", {
@@ -92,7 +91,7 @@ const BannerOffers = ({
 				</p>
 			</CarLowestPriceContainer>
 			<CountdownTimerContainer>
-				<p>{`Corra! Ofertas válidas por ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s apenas`}</p>
+				<p>{`Corra! Ofertas válidas por ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s`}</p>
 			</CountdownTimerContainer>
 		</BannerContainer>
 	);

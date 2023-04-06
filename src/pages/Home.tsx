@@ -13,7 +13,12 @@ import {
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import MenuItem from "@mui/material/MenuItem";
-import { CardsContainer, HomeContainer } from "./HomeStyle";
+import {
+	BannerBorderDiv,
+	BannerDiv,
+	CardsContainer,
+	HomeContainer,
+} from "./HomeStyle";
 import {
 	CarsByBrandType,
 	CarType,
@@ -21,6 +26,7 @@ import {
 	orderByEnum,
 } from "../models";
 import BannerOffers from "../components/Banner";
+import { normalizeString } from "../utils/NormalizeString";
 
 const Home = () => {
 	const [cars, setCars] = useState(carros);
@@ -35,12 +41,16 @@ const Home = () => {
 	const [selectedMedian, setSelectedMedian] = useState<number>();
 	const [SelectedStandardDeviation, setSelectedStandardDeviation] =
 		useState<number>();
-	const [showFilters, setShowFilters] = useState(false);
-	const [showAboutCars, setShowAboutCars] = useState(false);
-	const [showBanner, setShowBanner] = useState(true);
-	const bannerRef = useRef<HTMLDivElement>(null);
-	const [bannerHeight, setBannerHeight] = useState<number | null>(null);
+	const [averagePrice, setAveragePrice] = useState(0);
 	const [countdown, setCountdown] = useState<number>(10800);
+	const [bannerHeight, setBannerHeight] = useState<number | null>(null);
+	const bannerRef = useRef<HTMLDivElement>(null);
+
+	const [showHide, setShowHide] = useState({
+		showFilters: false,
+		showAboutCars: false,
+		showBanner: true,
+	});
 
 	const [search, setSearch] = useState("");
 	const [maxYear, setMaxYear] = useState("");
@@ -54,14 +64,6 @@ const Home = () => {
 	const [isNew, setIsNew] = useState(false);
 	const [order, setOrder] = useState(true);
 	const [orderBy, setOrderBy] = useState<orderByEnum>(orderByEnum.modelo);
-	const [averagePrice, setAveragePrice] = useState(0);
-
-	function normalizeString(str: string) {
-		return str
-			.normalize("NFD")
-			.replace(/[\u0300-\u036f]/g, "")
-			.toLowerCase();
-	}
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
@@ -75,7 +77,7 @@ const Home = () => {
 		if (bannerRef.current) {
 			setBannerHeight(bannerRef.current.clientHeight);
 		}
-	}, [showBanner]);
+	}, [showHide.showBanner]);
 
 	useEffect(() => {
 		const uniqueYears = cars.reduce<number[]>((currentYear, car) => {
@@ -117,12 +119,14 @@ const Home = () => {
 			setAllYearsMin(filteredYears);
 		}
 	}, [maxYear]);
+
 	useEffect(() => {
 		if (minYear) {
 			const filteredYears = allYears.filter((year) => year >= Number(minYear));
 			setAllYearsMax(filteredYears);
 		}
 	}, [minYear]);
+
 	useEffect(() => {
 		if (order) {
 			if (orderBy !== orderByEnum.marca && orderBy !== orderByEnum.modelo) {
@@ -138,6 +142,7 @@ const Home = () => {
 			}
 		}
 	}, [order, orderBy]);
+
 	useEffect(() => {
 		if (totalSelectCars.length > 0) {
 			const years = totalSelectCars.map((carro) => carro.ano);
@@ -262,16 +267,25 @@ const Home = () => {
 							value={search}
 							InputLabelProps={{ style: { color: "#fff" } }}
 						/>
-						<div className="show-more" onClick={() => setShowFilters(!showFilters)}>
-							<p>{showFilters ? "Exibir menos filtros" : "Exibir mais filtros"}</p>
-							{showFilters ? (
+						<div
+							className="show-more"
+							onClick={() =>
+								setShowHide({ ...showHide, showFilters: !showHide.showFilters })
+							}
+						>
+							<p>
+								{showHide.showFilters
+									? "Exibir menos filtros"
+									: "Exibir mais filtros"}
+							</p>
+							{showHide.showFilters ? (
 								<KeyboardDoubleArrowUpIcon fontSize="small" />
 							) : (
 								<KeyboardDoubleArrowDownIcon fontSize="small" />
 							)}
 						</div>
 					</div>
-					{showFilters && (
+					{showHide.showFilters && (
 						<div className="second-search">
 							<div className="row-year-brand">
 								<FormControl fullWidth>
@@ -508,7 +522,7 @@ const Home = () => {
 						Calcular
 					</Button>
 				</div>
-				{showAboutCars ? (
+				{showHide.showAboutCars ? (
 					<div className="about-selected-cars">
 						<div className="total-cars selected-cars">
 							<p>Total de carros encontrados: </p>
@@ -544,7 +558,7 @@ const Home = () => {
 						</div>
 						<div
 							onClick={() => {
-								setShowAboutCars(!showAboutCars);
+								setShowHide({ ...showHide, showAboutCars: !showHide.showAboutCars });
 							}}
 							className="show-more-less-about-selected-cars"
 						>
@@ -555,7 +569,7 @@ const Home = () => {
 				) : (
 					<div
 						onClick={() => {
-							setShowAboutCars(!showAboutCars);
+							setShowHide({ ...showHide, showAboutCars: !showHide.showAboutCars });
 						}}
 						className="show-more-less-about-selected-cars"
 					>
@@ -577,23 +591,29 @@ const Home = () => {
 					);
 				})}
 			</CardsContainer>
-			{showBanner ? (
-				<div
+			{showHide.showBanner ? (
+				<BannerDiv
 					className="banner-div"
-					onClick={() => setShowBanner(!showBanner)}
+					onClick={() => {
+						setShowHide({ ...showHide, showBanner: !showHide.showBanner });
+					}}
 					ref={bannerRef}
+					show={showHide.showBanner}
 				>
 					<BannerOffers countdown={countdown} carros={carros} />
-				</div>
+				</BannerDiv>
 			) : (
 				bannerHeight && (
-					<div
+					<BannerBorderDiv
 						className="banner-border-div"
-						onClick={() => setShowBanner(!showBanner)}
+						onClick={() =>
+							setShowHide({ ...showHide, showBanner: !showHide.showBanner })
+						}
 						style={{ height: bannerHeight }}
+						show={showHide.showBanner}
 					>
 						<p>OFERTA!!</p>
-					</div>
+					</BannerBorderDiv>
 				)
 			)}
 		</HomeContainer>
